@@ -23,5 +23,5 @@ Before you submit:
 - [x] Make the GitHub repo public (reviewers will open it)
 - [x] Fill every bracket in the proposal
 - [ ] Add 1–2 cited market numbers and your real waitlist/testnet counts
-- [ ] Do one real trade through the app with Shield Wallet, so you can say it
+- [x] Do one real trade through the app with Shield Wallet, so you can say it
       works wallet-to-settlement

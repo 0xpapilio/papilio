@@ -4,8 +4,7 @@ Checked 21 Nov 2026. Programs change; re-check each link on the day you apply.
 
 ## Before anything (≈1 hour)
 1. ~~Make the GitHub repo public.~~ Done: github.com/0xpapilio/papilio is public.
-2. **Do one real trade yourself** in https://papilio.vitalveev.in/app with
-   Shield Wallet. Keep your Mac awake: the relayer runs there today.
+2. ~~Do one real trade yourself.~~ Done: a Shield Wallet trade settled on CoW (links in both applications).
 3. ~~Fill the [brackets].~~ Done, except the payout wallet address in the full CoW application.
 4. **Post the launch** (`../launch-posts.md`) so reviewers see activity, and
    note your waitlist count for the proposals.
@@ -46,7 +45,7 @@ Checked 21 Nov 2026. Programs change; re-check each link on the day you apply.
 ## Assets to attach or link
 | Asset | Use |
 |---|---|
-| `../papilio-demo-voiced.mp4` | "Demo video" field / forum post (upload to YouTube unlisted and link) |
+| `../papilio-demo-voiced.mp4` | Uploaded: https://youtu.be/LMX4ChrH8ZU (unlisted). Use in the "Demo video" field and forum post |
 | `../papilio-explainer-voiced.mp4` | X/LinkedIn launch, proposal intro |
 | `../how-it-works.png` | Inside the proposal, section 4 |
 | `../app-screenshot.png`, `../testnet-proof-screenshot.png` | Proposal + forum post |

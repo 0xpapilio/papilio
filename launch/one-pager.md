@@ -47,5 +47,5 @@ across chains can correlate; testnet anonymity set is tiny.
 - **Anukul Pandey:** engineering (Leo program, relayer, app)
 
 ## Links
-App https://papilio.vitalveev.in/app · Proof https://papilio.vitalveev.in/testnet ·
+App https://papilio.vitalveev.in/app · Video https://youtu.be/LMX4ChrH8ZU · Proof https://papilio.vitalveev.in/testnet ·
 Code https://github.com/0xpapilio/papilio · Site https://papilio.vitalveev.in

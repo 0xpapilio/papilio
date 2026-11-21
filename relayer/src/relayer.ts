@@ -15,14 +15,18 @@ const MIN_BLOCKS_LEFT = 600
 const STATE_FILE = '.watch-state.json'
 
 const api = () => `${env('ALEO_ENDPOINT')}/${env('ALEO_NETWORK', 'testnet')}`
-const latestHeight = async () => Number(await (await fetch(`${api()}/block/height/latest`)).json())
+const latestHeight = async () =>
+  Number(await (await fetch(`${api()}/block/height/latest`, { signal: AbortSignal.timeout(30_000) })).json())
 
-// Accepted lock_intent txs in [start, end) — the blocks API caps a range at 50.
-async function lockTxsIn(start: number, end: number): Promise<string[]> {
-  const res = await fetch(`${api()}/blocks?start=${start}&end=${end}`)
+// Accepted lock_intent txs from `start` on, plus the next height to scan.
+// The blocks API returns fewer blocks than asked (≈11 as of Nov 2026), so resume after the last one it returned.
+async function lockTxsFrom(start: number, end: number): Promise<{ ids: string[]; next: number }> {
+  const res = await fetch(`${api()}/blocks?start=${start}&end=${end}`, { signal: AbortSignal.timeout(30_000) })
   if (!res.ok) throw new Error(`blocks ${start}-${end}: ${res.status}`)
+  const blocks: any[] = await res.json()
+  if (!blocks.length) throw new Error(`blocks ${start}-${end}: empty`)
   const ids: string[] = []
-  for (const block of await res.json()) {
+  for (const block of blocks) {
     for (const c of block.transactions ?? []) {
       const ts = c.transaction?.execution?.transitions ?? []
       if (c.status === 'accepted' && ts.some((t: any) => t.program === env('ALEO_PROGRAM', 'papilio_intent.aleo') && t.function === 'lock_intent')) {
@@ -30,7 +34,7 @@ async function lockTxsIn(start: number, end: number): Promise<string[]> {
       }
     }
   }
-  return ids
+  return { ids, next: Math.max(...blocks.map((b) => b.header.metadata.height)) + 1 }
 }
 
 // Scan forever; relay each lock whose IntentNote decrypts to us.
@@ -42,12 +46,12 @@ async function watch() {
     try {
       const tip = await latestHeight()
       while (next <= tip) {
-        const end = Math.min(next + 50, tip + 1)
-        for (const id of await lockTxsIn(next, end)) {
+        const scan = await lockTxsFrom(next, Math.min(next + 50, tip + 1))
+        for (const id of scan.ids) {
           console.log(`\nlock seen: ${id}`)
           await relay(id).catch((e) => console.error(`skipped ${id}: ${e.message ?? e}`))
         }
-        next = end
+        next = scan.next
         writeFileSync(STATE_FILE, JSON.stringify({ next }))
       }
     } catch (e: any) {

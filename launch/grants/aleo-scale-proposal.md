@@ -7,7 +7,9 @@
 **Project:** Papilio: private trade intents on Aleo, settled on CoW Protocol
 **Category:** ZeFi
 **Ask:** USD 40,000 in three milestones
-**Live:** https://papilio.vitalveev.in/app · proof of a full trade: https://papilio.vitalveev.in/testnet
+**Live:** https://papilio.vitalveev.in/app · proof of a full trade: https://papilio.vitalveev.in/testnet · demo video: https://youtu.be/LMX4ChrH8ZU
+
+**Works from a real wallet:** a Shield Wallet trade through the live app settled on CoW ([order](https://explorer.cow.fi/sepolia/orders/0x74a797f77b7b10cb4257f7245bc42560fef3d366c5fd30f03997e1e43b46fa62160319aa4441838d1284f0ae75b1bbb1016627f76b01ea08), [settlement](https://sepolia.etherscan.io/tx/0x221ab07cc5aff5bc33380c960f6ad9165125eb36ffd6e971cc36e7fc21c3af4a)).
 **Code:** https://github.com/0xpapilio/papilio (MIT)
 
 ---

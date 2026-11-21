@@ -46,6 +46,8 @@ We built and shipped Papilio v1 end to end: a Leo program on Aleo testnet,
 a TypeScript relayer that places and settles real CoW orders via the official
 SDK, and a wallet-connected dapp. Evidence:
 - Live app: https://papilio.vitalveev.in/app
+- Demo video: https://youtu.be/LMX4ChrH8ZU
+- Real Shield Wallet trade, settled on CoW: [order](https://explorer.cow.fi/sepolia/orders/0x74a797f77b7b10cb4257f7245bc42560fef3d366c5fd30f03997e1e43b46fa62160319aa4441838d1284f0ae75b1bbb1016627f76b01ea08) · [settlement](https://sepolia.etherscan.io/tx/0x221ab07cc5aff5bc33380c960f6ad9165125eb36ffd6e971cc36e7fc21c3af4a)
 - Full trade on explorers (lock → [CoW order](https://explorer.cow.fi/sepolia/orders/0x8e48ce9f85493b0277de15a43113bba9f7bb9c7ef166790c6a2d980ef61a6be6160319aa4441838d1284f0ae75b1bbb1016627f76b0181f4) → [settlement](https://sepolia.etherscan.io/tx/0xe9f7c15b30ed10be94f3ed115d993a5ff4d6185e61144e3e59eaa38c48ff8632) → claim): https://papilio.vitalveev.in/testnet
 - Code (MIT): https://github.com/0xpapilio/papilio
 - Anukul Pandey: B.Tech in Electronics and Instrumentation; won Reef Chain hackathons and received Reef Chain grants, won Avalanche Speedrun (Team1) twice, and won the Gelato global hackathon. Portfolio: https://anukul.notcool.in · LinkedIn: https://linkedin.com/in/anukulpandey
