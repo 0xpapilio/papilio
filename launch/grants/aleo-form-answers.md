@@ -10,18 +10,18 @@ start with the smaller **START** tier, email grants@aleo.org first: see
 | Has your project been approved for a START Grant? | No |
 | Project Name | Papilio |
 | Is your Team based in the United States? | No (India) |
-| Contact Name | **[your full name]** |
-| Email Address | **[the email you'll check daily]** |
-| Telegram | **[@your_handle]** |
+| Contact Name | Anukul Pandey |
+| Email Address | (given in chat; kept out of this public repo) |
+| Telegram | (given in chat; kept out of this public repo) |
 | What category are you submitting to? | **ZeFi** |
 | Upload Proposal Document | `aleo-scale-proposal.md` pasted into the official template, exported as PDF |
-| Where did you learn about Aleo? | **[honest answer, e.g. "Aleo docs / Twitter / a hackathon"]** |
-| Grant Amount (USD) | **[40000]**, matching the proposal's milestone table |
+| Where did you learn about Aleo? | Muse |
+| Grant Amount (USD) | 40000, matching the proposal's milestone table |
 | Are you or any team members subject to OFAC sanctions? | No |
 
 Before you submit:
-- [ ] Make the GitHub repo public (reviewers will open it)
-- [ ] Fill every **[bracket]** in the proposal
+- [x] Make the GitHub repo public (reviewers will open it)
+- [x] Fill every bracket in the proposal
 - [ ] Add 1–2 cited market numbers and your real waitlist/testnet counts
 - [ ] Do one real trade through the app with Shield Wallet, so you can say it
       works wallet-to-settlement

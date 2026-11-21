@@ -3,11 +3,10 @@
 > Paste each section into a copy of the official template
 > (https://docs.google.com/document/d/1u_qGdlCVovocr91G78bw59poIMhvi9HU8DVqhpN0cy0),
 > export as PDF, and upload it in the form. Form answers: `aleo-form-answers.md`.
-> Numbers in **[brackets]** are proposals: change them if you want.
 
 **Project:** Papilio: private trade intents on Aleo, settled on CoW Protocol
 **Category:** ZeFi
-**Ask:** **[USD 40,000]** in three milestones
+**Ask:** USD 40,000 in three milestones
 **Live:** https://papilio.vitalveev.in/app · proof of a full trade: https://papilio.vitalveev.in/testnet
 **Code:** https://github.com/0xpapilio/papilio (MIT)
 
@@ -69,9 +68,9 @@ Aleo transaction, so it brings EVM order flow onto Aleo.
 
 | Name | Role | Background |
 |---|---|---|
-| **[Anukul Pandey]** | Engineering: Leo program, relayer, app | **[degree / college]** · GitHub: github.com/anukulpandey · **[LinkedIn]** · **[notable projects or hackathon wins]** |
-| **Veevaa Bajaj** | Design + marketing | NIFT SXR · **[LinkedIn / portfolio]** |
-| **Sarandha Bhola** | Legal + compliance | PIMR, BA LLB · **[LinkedIn]** |
+| **Anukul Pandey** | Engineering: Leo program, relayer, app | B.Tech, Electronics and Instrumentation · won Reef Chain hackathons and received Reef Chain grants, won Avalanche Speedrun (Team1) twice, won the Gelato global hackathon · github.com/anukulpandey · linkedin.com/in/anukulpandey · anukul.notcool.in |
+| **Veevaa Bajaj** | Design + marketing | NIFT SXR |
+| **Sarandha Bhola** | Legal + compliance | PIMR, BA LLB |
 
 What we've already shipped (in about a month): deployed `papilio_intent.aleo`
 on testnet, a relayer that settles real CoW Protocol orders, a wallet-connected
@@ -95,16 +94,15 @@ dapp, and an honest design doc listing eight things that still leak.
   *execution*, but the intent is still signed by a public wallet.
 - Address-clustering and portfolio trackers make any active wallet a public
   profile.
-- **[Add 1–2 numbers you trust: CoW monthly volume, a MEV-loss figure from a
-  source you can cite, or user-interview quotes. Reviewers weight real numbers.]**
+- CoW Swap alone routes about **$4.7B a month** (30-day volume) and about **$190B all-time** ([DefiLlama](https://defillama.com/protocol/cowswap), retrieved 21 Nov 2026). Every one of those orders is signed by a public wallet.
 
 **Early demand signals**
-- Waitlist on papilio.vitalveev.in: **[N signups]**
-- Testnet usage after launch: **[N wallets / N intents, fill in before submitting]**
+- Waitlist on papilio.vitalveev.in: 5 signups on day one (it opened 21 Nov 2026)
+- Testnet: the app opened to the public on 21 Nov 2026; full lock → CoW settlement → claim runs and a refund run are verifiable at papilio.vitalveev.in/testnet
 
-**TAM framing:** Papilio sits on DEX volume (hundreds of billions of dollars a year
-across Ethereum DEXs). Even a small privacy-sensitive share is a large flow of
-transactions onto Aleo. *(Cite a current source for the volume figure.)*
+**TAM framing:** Papilio sits on DEX volume, and CoW Swap alone settles about $4.7B a
+month (DefiLlama, above). Even a small privacy-sensitive share is a large flow of
+transactions onto Aleo.
 
 ---
 
@@ -147,9 +145,9 @@ not to claim without trading. Milestone 1 removes that.
 
 | # | Milestone | Deliverables | Timeline | Funding |
 |---|---|---|---|---|
-| 1 | **Trust-minimised claim** | `claim` requires proof that the CoW settlement for that order happened (settlement attestation verified on Aleo); tests for forged/missing proofs; updated design doc | **[6 weeks]** | **[$15,000]** |
-| 2 | **Real assets + private fees by default** | Replace the test token with a bridged/stable asset on Aleo testnet (e.g. via existing bridges); private-fee onboarding in the app; second tier set; anonymity-set metrics on the proof page | **[5 weeks]** | **[$12,000]** |
-| 3 | **Audit-ready + mainnet plan** | External review of the Leo program, escrow-lifecycle fuzzing, relayer hardening (monitoring, inventory limits), mainnet launch plan with CoW | **[6 weeks]** | **[$13,000]** |
+| 1 | **Trust-minimised claim** | `claim` requires proof that the CoW settlement for that order happened (settlement attestation verified on Aleo); tests for forged/missing proofs; updated design doc | 6 weeks | $15,000 |
+| 2 | **Real assets + private fees by default** | Replace the test token with a bridged/stable asset on Aleo testnet (e.g. via existing bridges); private-fee onboarding in the app; second tier set; anonymity-set metrics on the proof page | 5 weeks | $12,000 |
+| 3 | **Audit-ready + mainnet plan** | External review of the Leo program, escrow-lifecycle fuzzing, relayer hardening (monitoring, inventory limits), mainnet launch plan with CoW | 6 weeks | $13,000 |
 
 **Budget use:** two developers' time (~70%), security review (~20%),
 infrastructure (relayer hosting, RPC, testnet liquidity) (~10%).

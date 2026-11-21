@@ -39,8 +39,8 @@ before we apply? Thanks!
 Papilio: private trade intents for CoW Protocol
 
 ### Author(s)
-**[Anukul Pandey]** (engineering) · Veevaa Bajaj (design + marketing) ·
-Sarandha Bhola (legal + compliance). Forum handles: **[add]**
+Anukul Pandey (engineering) · Veevaa Bajaj (design + marketing) ·
+Sarandha Bhola (legal + compliance). Forum handle: @anuna
 
 ### Experiences and qualifications
 We built and shipped Papilio v1 end to end: a Leo program on Aleo testnet,
@@ -49,7 +49,7 @@ SDK, and a wallet-connected dapp. Evidence:
 - Live app: https://papilio.vitalveev.in/app
 - Full trade on explorers (lock → [CoW order](https://explorer.cow.fi/sepolia/orders/0x8e48ce9f85493b0277de15a43113bba9f7bb9c7ef166790c6a2d980ef61a6be6160319aa4441838d1284f0ae75b1bbb1016627f76b0181f4) → [settlement](https://sepolia.etherscan.io/tx/0xe9f7c15b30ed10be94f3ed115d993a5ff4d6185e61144e3e59eaa38c48ff8632) → claim): https://papilio.vitalveev.in/testnet
 - Code (MIT): https://github.com/0xpapilio/papilio
-- **[Add individual background: degrees, past projects, hackathons]**
+- Anukul Pandey: B.Tech in Electronics and Instrumentation; won Reef Chain hackathons and received Reef Chain grants, won Avalanche Speedrun (Team1) twice, and won the Gelato global hackathon. Portfolio: https://anukul.notcool.in · LinkedIn: https://linkedin.com/in/anukulpandey
 
 ### Grant Description
 
@@ -93,9 +93,9 @@ Milestone-based
 
 | Milestone | Title | Due date | Funding request |
 |---|---|---|---|
-| 1 | Order indistinguishability | **[start + 6 weeks]** | **[4,000 xDAI]** |
-| 2 | Multi-relayer | **[start + 12 weeks]** | **[4,000 xDAI]** |
-| 3 | Mainnet readiness | **[start + 16 weeks]** | **[2,000 xDAI + 5,000 COW]** |
+| 1 | Order indistinguishability | 6 weeks after approval | 4,000 xDAI |
+| 2 | Multi-relayer | 12 weeks after approval | 4,000 xDAI |
+| 3 | Mainnet readiness | 16 weeks after approval | 2,000 xDAI + 5,000 COW |
 
 **Milestone 1: Order indistinguishability**
 - Batch submission and randomized delay in the relayer to blunt lock→order timing correlation
@@ -114,10 +114,10 @@ Milestone-based
 - Volume plan: launch partners and target wallets for the first 90 days
 
 ### Length
-4 months, starting **[date]**.
+4 months, starting on approval.
 
 ### Funding Request
-**[10,000 xDAI + 5,000 COW]** total.
+10,000 xDAI + 5,000 COW total.
 - xDAI covers engineering time for three milestones (~4 months, two people part-time)
   and relayer infrastructure (RPC, hosting, testnet inventory).
 - COW aligns us long-term with the protocol and is paid only on the mainnet-readiness milestone.
