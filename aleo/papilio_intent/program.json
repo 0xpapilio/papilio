@@ -1,0 +1,6 @@
+{
+  "program": "papilio_intent.aleo",
+  "version": "0.1.0",
+  "description": "Private trade-intent escrow for Papilio (testnet skeleton)",
+  "license": "MIT"
+}

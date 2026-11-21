@@ -131,11 +131,13 @@ export default function DotArt({
   art,
   n,
   flap = false,
+  speed = 1,
   className,
 }: {
   art: keyof typeof ART;
   n: number;
   flap?: boolean;
+  speed?: number;
   className?: string;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -157,10 +159,29 @@ export default function DotArt({
     };
     draw(0);
     if (!flap || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Slow and stepped on purpose: pixels shift, they don't glide.
-    const id = setInterval(() => draw(Date.now() / 700), 150);
-    return () => clearInterval(id);
-  }, [art, n, flap]);
+    // At rest it redraws every 150ms on purpose: pixels step, they don't glide.
+    // A "papilio:joined" event (fired by the waitlist) makes it flap fast for a few seconds.
+    let phase = 0;
+    let boost = 0;
+    let last = performance.now();
+    let drawn = 0;
+    const onJoin = () => (boost = 5);
+    window.addEventListener("papilio:joined", onJoin);
+    const id = setInterval(() => {
+      const now = performance.now();
+      phase += ((now - last) / 700) * (speed + boost);
+      last = now;
+      boost = boost > 0.05 ? boost * 0.97 : 0;
+      if (boost || speed > 1 || now - drawn >= 150) {
+        draw(phase);
+        drawn = now;
+      }
+    }, 50);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener("papilio:joined", onJoin);
+    };
+  }, [art, n, flap, speed]);
 
   return <canvas ref={ref} width={n * CELL} height={n * CELL} aria-hidden className={className} />;
 }

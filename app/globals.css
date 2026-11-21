@@ -28,7 +28,7 @@ body {
 
 @layer components {
   .btn {
-    @apply inline-block cursor-pointer whitespace-nowrap rounded-lg bg-acc px-4.5 py-2.5 text-sm font-medium text-[#00101f] transition-colors hover:bg-[#33ccff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acc;
+    @apply inline-block cursor-pointer whitespace-nowrap rounded-lg bg-acc px-4.5 py-2.5 text-sm font-medium text-[#00101f] transition active:scale-95 hover:bg-[#33ccff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acc;
   }
   .btn-ghost {
     @apply border border-line bg-transparent text-ink hover:border-dim hover:bg-transparent;
@@ -56,4 +56,46 @@ body {
       animation-range: entry 0% entry 35%;
     }
   }
+}
+
+/* Waitlist celebration: the confirmation pops in with a pulse, pixel sparks burst out, butterflies fly off. */
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.9); }
+  60% { transform: scale(1.04); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes ring {
+  0% { box-shadow: 0 0 0 0 #00aaff66; }
+  100% { box-shadow: 0 0 0 18px #00aaff00; }
+}
+@keyframes spark {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
+}
+@keyframes fly-away {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(0deg); }
+  15% { opacity: 1; }
+  45% { transform: translate(calc(var(--dx) * 0.35 - 50%), calc(var(--dy) * 0.5 - 50%)) scale(1) rotate(var(--r)); }
+  75% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(var(--dx) - 50%), calc(var(--dy) - 50%)) scale(0.6) rotate(calc(var(--r) * -1)); }
+}
+.joined {
+  animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2) both, ring 1.2s ease-out 0.2s 2;
+}
+.spark {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--color-acc);
+  animation: spark 0.9s ease-out var(--delay) both;
+}
+.spark:nth-child(3n) { background: #33ccff; }
+.spark:nth-child(3n + 1) { background: #0066ff; }
+.fly-away {
+  position: absolute;
+  animation: fly-away 2.6s cubic-bezier(0.3, 0.6, 0.4, 1) var(--delay) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .joined { animation: none; }
+  .spark, .fly-away { display: none; }
 }

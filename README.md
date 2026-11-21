@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Papilio
 
-## Getting Started
+Private trade intents. Commit to a trade on **Aleo** in zero knowledge; a
+relayer settles it on **CoW Protocol**. Your wallet and balance never appear
+on either chain.
 
-First, run the development server:
+**v1 is a testnet skeleton** — Aleo testnet + Sepolia, one trusted relayer,
+no token, no mainnet. What it proves, what it trusts, and what still leaks:
+[`docs/design.md`](docs/design.md).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+user ──lock(zk)──▶ Aleo escrow ──encrypted intent──▶ relayer ──order──▶ CoW (Sepolia)
+  ▲                                                                        │
+  └────────────── refund if unfilled ◀──────────── claim after settlement ─┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Repo map
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What |
+|------|------|
+| [`docs/design.md`](docs/design.md) | flow, who-learns-what, trust model, leak list |
+| [`aleo/papilio_intent/`](aleo/papilio_intent) | Leo program: lock / claim / refund + tests |
+| [`relayer/`](relayer) | TS relayer: decrypt intent → CoW order → claim; evidence logs |
+| [`docs/grant-aleo.md`](docs/grant-aleo.md), [`docs/grant-cow.md`](docs/grant-cow.md) | grant cover pages |
+| [`app/`](app) | landing page (Next.js, [papilio site](https://papilio.network)) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Reproduce in five commands
 
-## Learn More
+```bash
+cd aleo/papilio_intent && leo build && ./tests/test.sh   # 1-2: program + proofs
+cd ../../relayer && npm install && npm test              # 3-4: relayer units
+cp env.example .env   # fill testnet keys, then:  npm run demo
+```
 
-To learn more about Next.js, take a look at the following resources:
+Deployed program ID and a settled order link are recorded in
+[`aleo/papilio_intent/DEPLOYMENT.md`](aleo/papilio_intent/DEPLOYMENT.md)
+after first deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Acceptance status
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Leo proof verifies with sufficient balance, fails without, balance never public — `aleo/papilio_intent/tests/test.sh`
+- [ ] Sepolia order settles end-to-end from a verified commitment — `npm run demo`
+- [ ] Unfilled intent refunds after expiry — `npm run demo:fail`
+- [x] `design.md` lists ≥ 3 leaks at settlement (it lists 7)
+- [x] No mainnet code — CI-enforced by `scripts/check-no-mainnet.sh`
+- [x] No private key leaves the local machine (keys live only in untracked `.env`)
 
-## Deploy on Vercel
+## Landing page
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm install && npm run dev   # http://localhost:3000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT — see [LICENSE](LICENSE).

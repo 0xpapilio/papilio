@@ -1,0 +1,25 @@
+{
+  "name": "papilio-relayer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Papilio v1 relayer: Aleo intent -> CoW Protocol (Sepolia) settlement",
+  "scripts": {
+    "spike:cow": "tsx src/spike-cow.ts",
+    "relayer": "tsx src/relayer.ts",
+    "demo": "tsx src/demo.ts",
+    "demo:fail": "tsx src/demo-fail.ts",
+    "test": "node --import tsx --test src/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cowprotocol/cow-sdk": "^5.9.0",
+    "@provablehq/sdk": "^0.7.0",
+    "dotenv": "^16.4.5",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
