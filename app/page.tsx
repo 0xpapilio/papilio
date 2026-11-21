@@ -58,22 +58,28 @@ function ScoreCard({ name, score, papilio = false }: { name: string; score: numb
 export default function Home() {
   return (
     <div className="mx-auto max-w-[1100px] px-5">
-      <nav className="flex items-center gap-6 border-b border-line py-4">
+      <nav className="sticky top-0 z-40 -mx-5 flex items-center gap-5 border-b border-line bg-bg/85 px-5 py-3 backdrop-blur">
         <a href="#top" className="mr-auto flex items-center gap-2 font-display text-lg font-bold tracking-tight">
-          <DotArt art="fly" n={48} className="w-8" />
+          <DotArt art="fly" n={48} className="w-7" />
           papilio
         </a>
         <a href="#how" className="hidden text-sm text-dim hover:text-ink md:inline">How it works</a>
-        <a href="#score" className="hidden text-sm text-dim hover:text-ink md:inline">Privacy score</a>
-        <a href="#roadmap" className="hidden text-sm text-dim hover:text-ink md:inline">Roadmap</a>
         <a href="#team" className="hidden text-sm text-dim hover:text-ink md:inline">Team</a>
-        <a href="/testnet" className="hidden text-sm text-acc hover:text-ink md:inline">Live on testnet</a>
-        <a href="/app" className="btn">Launch app</a>
+        <a href="/app" className="btn inline-flex items-center gap-2">
+          Launch app
+          <span className="rounded bg-[#00101f]/15 px-1.5 py-0.5 font-mono text-[10px] tracking-wider uppercase">testnet</span>
+        </a>
       </nav>
 
       <header id="top" className="grid items-center gap-6 pt-12 pb-18 md:grid-cols-[1.1fr_0.9fr] md:pt-20 md:pb-28">
         <div>
-          <p className="label">Papilio · shielded intent router</p>
+          <p className="label flex flex-wrap items-center gap-2.5">
+            <a href="/testnet" className="inline-flex items-center gap-1.5 rounded-full border border-acc/40 px-2.5 py-0.5 hover:border-acc">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-acc" />
+              Testnet beta
+            </a>
+            Shielded intent router
+          </p>
           <h1 className="mt-3.5 mb-4.5 font-display text-[clamp(40px,7vw,68px)] leading-[1.02] font-bold tracking-tight">
             Your trade, before it becomes a <span className="text-acc">butterfly.</span>
           </h1>
@@ -82,8 +88,8 @@ export default function Home() {
           </p>
           <Waitlist />
           <p className="font-mono text-xs tracking-wider text-dim">
-            No custody · testnet only in V1 ·{" "}
-            <a href="/app" className="text-acc hover:underline">try the testnet app →</a>
+            No custody · test tokens only, mainnet not live yet ·{" "}
+            <a href="/app" className="whitespace-nowrap text-acc hover:underline">try the testnet app →</a>
           </p>
         </div>
         <div className="relative mx-auto w-full max-w-[480px]">

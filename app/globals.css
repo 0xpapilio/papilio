@@ -15,6 +15,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 72px; /* keep anchored sections clear of the sticky nav */
 }
 
 /* Aleo wallet adapter UI, in Papilio colors. Doubled :root beats the
