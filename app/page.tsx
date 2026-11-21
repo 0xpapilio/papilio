@@ -175,7 +175,7 @@ export default function Home() {
         <DotArt art="fly" n={48} className="w-6" />
         <span className="mr-auto">Papilio never holds your funds.</span>
         <a href="#" className="hover:text-ink">X</a>
-        <a href="#" className="hover:text-ink">GitHub</a>
+        <a href="https://github.com/0xpapilio/papilio" className="hover:text-ink">GitHub</a>
       </footer>
     </div>
   );

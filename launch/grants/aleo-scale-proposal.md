@@ -9,7 +9,7 @@
 **Category:** ZeFi
 **Ask:** **[USD 40,000]** in three milestones
 **Live:** https://papilio.vitalveev.in/app · proof of a full trade: https://papilio.vitalveev.in/testnet
-**Code:** https://github.com/anukulpandey/papilio (MIT)
+**Code:** https://github.com/0xpapilio/papilio (MIT)
 
 ---
 

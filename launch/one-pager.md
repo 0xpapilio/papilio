@@ -50,4 +50,4 @@ across chains can correlate; testnet anonymity set is tiny.
 
 ## Links
 App https://papilio.vitalveev.in/app · Proof https://papilio.vitalveev.in/testnet ·
-Code https://github.com/anukulpandey/papilio · Site https://papilio.vitalveev.in
+Code https://github.com/0xpapilio/papilio · Site https://papilio.vitalveev.in

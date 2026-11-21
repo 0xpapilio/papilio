@@ -48,7 +48,7 @@ a TypeScript relayer that places and settles real CoW orders via the official
 SDK, and a wallet-connected dapp. Evidence:
 - Live app: https://papilio.vitalveev.in/app
 - Full trade on explorers (lock → [CoW order](https://explorer.cow.fi/sepolia/orders/0x8e48ce9f85493b0277de15a43113bba9f7bb9c7ef166790c6a2d980ef61a6be6160319aa4441838d1284f0ae75b1bbb1016627f76b0181f4) → [settlement](https://sepolia.etherscan.io/tx/0xe9f7c15b30ed10be94f3ed115d993a5ff4d6185e61144e3e59eaa38c48ff8632) → claim): https://papilio.vitalveev.in/testnet
-- Code (MIT): https://github.com/anukulpandey/papilio
+- Code (MIT): https://github.com/0xpapilio/papilio
 - **[Add individual background: degrees, past projects, hackathons]**
 
 ### Grant Description
@@ -127,7 +127,7 @@ Milestone-based
 or Ethereum mainnet under CIP-82]**
 
 ### Other Information
-- Design doc with trust model and eight known leaks: https://github.com/anukulpandey/papilio/blob/main/docs/design.md
+- Design doc with trust model and eight known leaks: https://github.com/0xpapilio/papilio/blob/main/docs/design.md
 - Testnet only today; CI blocks mainnet code until reviewed.
 - No team member is a US person.
 

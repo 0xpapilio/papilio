@@ -23,7 +23,7 @@ user ──lock(zk)──▶ Aleo escrow ──encrypted intent──▶ relayer
 | [`relayer/`](relayer) | TS relayer: decrypt intent → CoW order → claim; evidence logs. `npm run relayer` watches the chain |
 | [`app/app/`](app/app) | the dapp at `/app`: connect wallet, mint test tokens, shield & swap, track, refund |
 | [`docs/grant-aleo.md`](docs/grant-aleo.md), [`docs/grant-cow.md`](docs/grant-cow.md) | grant cover pages |
-| [`app/`](app) | landing page (Next.js, [papilio site](https://papilio.network)) |
+| [`app/`](app) | landing page (Next.js, [papilio.vitalveev.in](https://papilio.vitalveev.in)) |
 
 ## Reproduce in five commands
 

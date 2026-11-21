@@ -6,7 +6,7 @@ before posting (left as plain text on purpose so nobody gets tagged by accident)
 Links used everywhere:
 - App: https://papilio.vitalveev.in/app
 - Proof page: https://papilio.vitalveev.in/testnet
-- Code: https://github.com/anukulpandey/papilio *(make the repo public first)*
+- Code: https://github.com/0xpapilio/papilio *(make the repo public first)*
 
 ---
 
