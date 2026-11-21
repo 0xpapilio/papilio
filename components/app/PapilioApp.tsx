@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AleoWalletProvider, useWallet } from "@provablehq/aleo-wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton, useWalletModal } from "@provablehq/aleo-wallet-adapter-react-ui";
 import { ShieldWalletAdapter } from "@provablehq/aleo-wallet-adapter-shield";
@@ -10,6 +10,8 @@ import { WalletDecryptPermission } from "@provablehq/aleo-wallet-standard";
 import { Network } from "@provablehq/aleo-types";
 import "@provablehq/aleo-wallet-adapter-react-ui/dist/styles.css";
 import DotArt from "@/components/DotArt";
+import Burst from "@/components/Burst";
+import { ToastProvider, useToast } from "./Toasts";
 import {
   BLOCK_SECONDS, EXPIRY_BLOCKS, MINT_UNITS, PAIR_ID, PROGRAM, RELAYER_ALEO, TIERS, type Tier,
   aleoTx, cowOrder, findCowOrder, fmtUnits, isEvmAddress, latestHeight, lockCommitment, mapping,
@@ -45,23 +47,32 @@ const mins = (blocks: number) => Math.max(1, Math.round((blocks * BLOCK_SECONDS)
 // ---------- root ----------
 
 export default function PapilioApp() {
+  return (
+    <ToastProvider>
+      <Wallets />
+    </ToastProvider>
+  );
+}
+
+function Wallets() {
+  const toast = useToast();
   const wallets = useMemo(
     () => [new ShieldWalletAdapter(), new LeoWalletAdapter({ appName: "Papilio" }), new PuzzleWalletAdapter()],
     [],
   );
   // Without this the library only console.logs wallet failures, so a locked or refusing wallet looks like a dead button.
-  const [walletError, setWalletError] = useState("");
+  const onError = useCallback((e: Error) => toast("error", "Your wallet didn't connect", e.message || e.name || undefined), [toast]);
   return (
     <AleoWalletProvider
       wallets={wallets}
       network={Network.TESTNET}
       autoConnect
-      onError={(e) => setWalletError(`Wallet: ${e.message || e.name || "could not connect"}`)}
+      onError={onError}
       decryptPermission={WalletDecryptPermission.UponRequest}
       programs={[PROGRAM, "credits.aleo"]}
     >
       <WalletModalProvider>
-        <Shell walletError={walletError} clearWalletError={() => setWalletError("")} />
+        <Shell />
       </WalletModalProvider>
     </AleoWalletProvider>
   );
@@ -69,14 +80,14 @@ export default function PapilioApp() {
 
 // ---------- page ----------
 
-function Shell({ walletError, clearWalletError }: { walletError: string; clearWalletError: () => void }) {
+function Shell() {
   const w = useWallet();
+  const toast = useToast();
   const [height, setHeight] = useState<number | null>(null);
   const [records, setRecords] = useState<Rec[]>([]);
   const [intents, setIntents] = useState<Intent[]>([]);
   const [privateFee, setPrivateFee] = useState(true);
   const [busy, setBusy] = useState<"" | "mint" | "lock" | string>("");
-  const [error, setError] = useState("");
 
   useEffect(() => setIntents(loadIntents()), []);
   const updateIntent = useCallback((walletTxId: string, patch: Partial<Intent>) => {
@@ -99,7 +110,7 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
     try {
       setRecords((await w.requestRecords(PROGRAM, true, "unspent")) as Rec[]);
     } catch (e) {
-      setError(`Could not read your records: ${errText(e)}`);
+      toast("error", "Couldn't read your private balance", errText(e));
     }
   }, [w]);
   useEffect(() => { refreshRecords(); }, [w.connected]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -108,18 +119,35 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
   const tickets = records.filter((r) => fields(r).commitment);
   const balance = tokens.reduce((s, r) => s + num(fields(r).amount), 0);
 
-  async function run(kind: string, fn: () => Promise<void>) {
+  async function run(kind: string, fn: () => Promise<void>, done: [string, string]): Promise<boolean> {
     setBusy(kind);
-    setError("");
-    try { await fn(); } catch (e) { setError(errText(e)); } finally { setBusy(""); }
+    try {
+      await fn();
+      toast("success", ...done);
+      return true;
+    } catch (e) {
+      const msg = errText(e);
+      if (/reject|denied|cancel|declined/i.test(msg)) toast("info", "Cancelled in your wallet", "Nothing was sent. Try again whenever you're ready.");
+      else toast("error", FAILED[kind.split(":")[0]] ?? "That didn't fly", msg);
+      return false;
+    } finally {
+      setBusy("");
+    }
   }
+
+  // Say hello when a wallet connects (including auto-reconnect on load).
+  const wasConnected = useRef(false);
+  useEffect(() => {
+    if (w.connected && !wasConnected.current) toast("success", "Wallet connected", "Your private balance loads in a moment.");
+    wasConnected.current = w.connected;
+  }, [w.connected, toast]);
 
   const mint = () =>
     run("mint", async () => {
       const res = await w.executeTransaction({ program: PROGRAM, function: "mint", inputs: [`${MINT_UNITS}u64`], privateFee });
       if (!res) throw new Error("Wallet did not return a transaction");
       setTimeout(refreshRecords, 25_000); // record appears once the wallet syncs the block
-    });
+    }, ["Test tokens on the way", "They show up in about 30 seconds, once your wallet syncs."]);
 
   const lock = (tier: Tier, receiver: string) =>
     run("lock", async () => {
@@ -149,7 +177,7 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
         saveIntents(next);
         return next;
       });
-    });
+    }, ["Trade shielded", "Locked in zero knowledge. Watch it settle below."]);
 
   const refund = (ticket: Rec) =>
     run(`refund:${fields(ticket).commitment}`, async () => {
@@ -161,7 +189,7 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
       });
       if (!res) throw new Error("Wallet did not return a transaction");
       setTimeout(refreshRecords, 25_000);
-    });
+    }, ["Refund sent", "Your escrow is on its way back to your wallet."]);
 
   const ticketFor = (commitment?: string) => tickets.find((t) => fields(t).commitment?.replace(/\.(private|public)$/, "") === commitment);
   const orphanTickets = tickets.filter((t) => !intents.some((i) => i.commitment && fields(t).commitment?.startsWith(i.commitment)));
@@ -178,15 +206,9 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
           <span className="size-1.5 rounded-full bg-[#13bc80]" />
           Aleo {height ? `#${height.toLocaleString()}` : "…"}
         </span>
-        <WalletButton onOpen={clearWalletError} />
+        <WalletButton />
       </nav>
 
-      {(error || walletError) && (
-        <div role="alert" className="mt-4 flex items-start justify-between gap-3 rounded-lg border border-[#fe514e]/40 bg-[#fe514e]/10 px-4 py-3 text-sm">
-          <span>{error || walletError}</span>
-          <button onClick={() => { setError(""); clearWalletError(); }} className="text-dim hover:text-ink" aria-label="Dismiss">✕</button>
-        </div>
-      )}
 
       <div className="mx-auto mt-10 w-full max-w-[460px]">
         <SwapCard
@@ -202,7 +224,7 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
 
       </div>
 
-      <section aria-label="Your intents" className="mx-auto mt-12 w-full max-w-[680px] min-w-0">
+      <section id="intents" aria-label="Your intents" className="mx-auto mt-12 w-full max-w-[680px] min-w-0">
           <div className="mb-3 flex items-baseline justify-between">
             <p className="label">Your intents</p>
             {w.connected && (
@@ -240,7 +262,7 @@ function Shell({ walletError, clearWalletError }: { walletError: string; clearWa
 
 // Disconnected, the stock button retries the last-used wallet and swallows any error, so a click can do
 // nothing visible. Always open the picker instead; choosing there connects and reports errors via onError.
-function WalletButton({ onOpen }: { onOpen: () => void }) {
+function WalletButton() {
   const w = useWallet();
   const { setVisible } = useWalletModal();
   if (w.connected) return <WalletMultiButton />;
@@ -249,7 +271,6 @@ function WalletButton({ onOpen }: { onOpen: () => void }) {
       type="button"
       className="btn"
       onClick={() => {
-        onOpen();
         w.selectWallet(null);
         setVisible(true);
       }}
@@ -268,12 +289,14 @@ function SwapCard(p: {
   privateFee: boolean;
   setPrivateFee: (v: boolean) => void;
   onMint: () => void;
-  onLock: (t: Tier, receiver: string) => void;
+  onLock: (t: Tier, receiver: string) => Promise<boolean>;
   onRefresh: () => void;
 }) {
   const [tier, setTier] = useState<Tier>(TIERS[0]);
   const [receiver, setReceiver] = useState("");
   const [quote, setQuote] = useState<bigint | null>(null);
+  const [bursts, setBursts] = useState(0);
+  const locking = p.busy === "lock";
   const validReceiver = isEvmAddress(receiver);
   const enough = p.balance >= tier.units;
 
@@ -286,14 +309,27 @@ function SwapCard(p: {
     return () => { live = false; clearInterval(t); };
   }, [tier]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  let cta = { label: "Shield & swap", disabled: false, action: () => p.onLock(tier, receiver) };
+  // On success, like other swap apps: clear the form, celebrate, and bring the new intent into view.
+  const shield = async () => {
+    if (!(await p.onLock(tier, receiver))) return;
+    setReceiver("");
+    setBursts((b) => b + 1);
+    setTimeout(() => document.getElementById("intents")?.scrollIntoView({ behavior: "smooth", block: "start" }), 900);
+  };
+  const loading = (text: string) => (
+    <span className="inline-flex items-center justify-center gap-2.5">
+      <DotArt art="fly" n={24} flap speed={8} className="w-5" />
+      {text}
+    </span>
+  );
+  let cta: { label: React.ReactNode; disabled: boolean; action: () => void } = { label: "Shield & swap", disabled: false, action: shield };
   if (!p.connected) cta = { label: "Connect a wallet to start", disabled: true, action: () => {} };
-  else if (!enough) cta = { label: p.busy === "mint" ? "Minting…" : "Get test tokens", disabled: p.busy !== "", action: p.onMint };
+  else if (!enough) cta = { label: p.busy === "mint" ? loading("Minting test tokens…") : "Get test tokens", disabled: p.busy !== "", action: p.onMint };
+  else if (locking) cta = { label: loading("Confirm in your wallet…"), disabled: true, action: () => {} };
   else if (!validReceiver) cta = { label: "Enter a Sepolia receiver", disabled: true, action: () => {} };
-  else if (p.busy === "lock") cta = { label: "Confirm in your wallet…", disabled: true, action: () => {} };
 
   return (
-    <section aria-label="Shield and swap" className="card self-start p-4 sm:p-5">
+    <section aria-label="Shield and swap" aria-busy={locking} className="card self-start p-4 sm:p-5">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-xl font-bold tracking-tight">Shield & swap</h1>
         <span className="font-mono text-[11px] tracking-wider text-dim">Aleo → CoW · Sepolia</span>
@@ -317,6 +353,7 @@ function SwapCard(p: {
                 role="radio"
                 aria-checked={tier.id === t.id}
                 onClick={() => setTier(t)}
+                disabled={locking}
                 className={`rounded-lg border px-3 py-1.5 font-display text-2xl font-bold transition ${tier.id === t.id ? "border-acc text-ink" : "border-line text-faint hover:text-dim"}`}
               >
                 {t.label}
@@ -346,6 +383,7 @@ function SwapCard(p: {
         <input
           value={receiver}
           onChange={(e) => setReceiver(e.target.value.trim())}
+          disabled={locking}
           placeholder="0x… (use a fresh address)"
           spellCheck={false}
           autoComplete="off"
@@ -363,7 +401,10 @@ function SwapCard(p: {
 
       <PrivacyReadout privateFee={p.privateFee} />
 
-      <button onClick={cta.action} disabled={cta.disabled} className="btn mt-4 w-full py-3 text-base disabled:cursor-not-allowed disabled:opacity-50">
+      <div className="relative">
+        {bursts > 0 && <Burst key={bursts} />}
+      </div>
+      <button onClick={cta.action} disabled={cta.disabled} className={`btn mt-4 w-full py-3 text-base disabled:cursor-not-allowed ${locking || p.busy === "mint" ? "disabled:opacity-80" : "disabled:opacity-50"}`}>
         {cta.label}
       </button>
       <p className="mt-2.5 text-center text-xs text-faint">
@@ -393,6 +434,23 @@ function PrivacyReadout({ privateFee }: { privateFee: boolean }) {
 
 // ---------- intent tracker ----------
 
+const FAILED: Record<string, string> = {
+  mint: "Couldn't get test tokens",
+  lock: "Couldn't shield your trade",
+  refund: "The refund didn't go through",
+};
+// Toast for each stage an intent reaches while you watch. A missing text falls back to the trade ("0.001 WETH → COW").
+const ANNOUNCE: Record<Phase, ["success" | "error" | "info", string, string?]> = {
+  proving: ["info", "Proving in your wallet"],
+  locked: ["info", "Locked on Aleo", "Your intent is shielded on-chain."],
+  ordered: ["info", "CoW order placed", "Solvers are competing for your trade."],
+  settled: ["success", "Settled on Sepolia", "Your COW has landed at the receiver."],
+  claimed: ["success", "Trade complete", "Every step is on a public explorer."],
+  expired: ["info", "Intent expired", "You can refund the escrow now."],
+  refunded: ["success", "Refunded", "Your escrow is back in your wallet."],
+  failed: ["error", "Your intent failed"],
+};
+
 type Phase = "proving" | "locked" | "ordered" | "settled" | "claimed" | "expired" | "refunded" | "failed";
 const STEPS: { key: Phase; label: string }[] = [
   { key: "proving", label: "Proved in wallet" },
@@ -417,10 +475,21 @@ function IntentRow({ intent, height, update, ticket, onRefund, busy }: {
   const [settleTx, setSettleTx] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const terminal = phase === "claimed" || phase === "refunded" || phase === "failed";
+  const toast = useToast();
+  const phaseRef = useRef(phase);
+  phaseRef.current = phase;
+  const caughtUp = useRef(false); // the first poll only catches up on old progress; announce changes after that
 
   useEffect(() => {
     if (terminal) return;
     let live = true;
+    const go = (next: Phase) => {
+      if (caughtUp.current && next !== phaseRef.current) {
+        const [kind, title, text] = ANNOUNCE[next];
+        toast(kind, title, text ?? `${tier.label} WETH → COW`);
+      }
+      setPhase(next);
+    };
     async function poll() {
       try {
         // 1. wallet tx -> on-chain id -> commitment
@@ -429,7 +498,7 @@ function IntentRow({ intent, height, update, ticket, onRefund, busy }: {
         if (!onchainId && w.connected) {
           // Wallets hand back their own request id until the tx is broadcast.
           const s = await Promise.resolve().then(() => w.transactionStatus(intent.walletTxId)).catch(() => null);
-          if (s && /fail|reject|abort/i.test(s.status)) { setPhase("failed"); setNote(s.status); return; }
+          if (s && /fail|reject|abort/i.test(s.status)) { go("failed"); setNote(s.status); return; }
           onchainId = s?.transactionId?.startsWith("at1") ? s.transactionId : undefined;
         }
         if (onchainId && !intent.onchainId) update(intent.walletTxId, { onchainId });
@@ -448,12 +517,14 @@ function IntentRow({ intent, height, update, ticket, onRefund, busy }: {
         // 3. Escrow state on Aleo
         const escrow = await mapping("escrow_amount", commitment);
         if (!live) return;
-        if (escrow === null) setPhase(o?.status === "fulfilled" ? "claimed" : "refunded");
-        else if (o?.status === "fulfilled") setPhase("settled");
-        else if (expiry && height && height >= expiry) setPhase("expired");
-        else setPhase(o ? "ordered" : "locked");
+        if (escrow === null) go(o?.status === "fulfilled" ? "claimed" : "refunded");
+        else if (o?.status === "fulfilled") go("settled");
+        else if (expiry && height && height >= expiry) go("expired");
+        else go(o ? "ordered" : "locked");
       } catch (e) {
-        if (live) { setPhase("failed"); setNote(errText(e)); }
+        if (live) { go("failed"); setNote(errText(e)); }
+      } finally {
+        caughtUp.current = true;
       }
     }
     poll();
@@ -465,7 +536,7 @@ function IntentRow({ intent, height, update, ticket, onRefund, busy }: {
   const blocksLeft = intent.expiry && height ? intent.expiry - height : null;
 
   return (
-    <li className="card p-4">
+    <li className="card intent-enter p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="font-display text-lg font-bold tracking-tight">
           {tier.label} WETH → COW
