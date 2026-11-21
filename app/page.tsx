@@ -17,7 +17,7 @@ const WHY = [
 
 const TEAM = [
   {
-    art: "morpho",
+    art: "emperor",
     name: "Veevaa Bajaj",
     school: "NIFT SXR",
     role: "Design + marketing",
@@ -66,6 +66,7 @@ export default function Home() {
         <a href="#how" className="hidden text-sm text-dim hover:text-ink md:inline">How it works</a>
         <a href="#score" className="hidden text-sm text-dim hover:text-ink md:inline">Privacy score</a>
         <a href="#roadmap" className="hidden text-sm text-dim hover:text-ink md:inline">Roadmap</a>
+        <a href="#team" className="hidden text-sm text-dim hover:text-ink md:inline">Team</a>
         <a href="#top" className="btn">Join waitlist</a>
       </nav>
 
@@ -92,7 +93,12 @@ export default function Home() {
         <h2 className="mt-2.5 mb-8 font-display text-[clamp(28px,4vw,40px)] font-bold tracking-tight">Three stages. One clean trade.</h2>
         <ol className="grid gap-4 md:grid-cols-3">
           {STAGES.map((s, i) => (
-            <li key={s.title} className="card">
+            <li key={s.title} className="card relative">
+              {i < STAGES.length - 1 && (
+                <span aria-hidden className="absolute top-1/2 -right-[13px] z-10 hidden -translate-y-1/2 font-mono text-xs text-acc md:block">
+                  →
+                </span>
+              )}
               <div className="mb-4 rounded-lg border border-line bg-bg p-4">
                 <DotArt art={s.art} n={64} className="mx-auto h-auto w-full max-w-[170px]" />
                 <p className="mt-2 font-mono text-xs tracking-wider text-dim">{s.note}</p>
@@ -142,7 +148,7 @@ export default function Home() {
           {TEAM.map((m) => (
             <li key={m.name} className="card group flex items-center gap-4 transition-colors hover:border-acc/40">
               <div className="shrink-0 rounded-lg border border-line bg-bg p-2">
-                <DotArt art={m.art} n={40} className="h-auto w-16 transition-transform duration-300 group-hover:scale-110" />
+                <DotArt art={m.art} n={56} flap className="h-auto w-20 transition-transform duration-300 group-hover:scale-110" />
               </div>
               <div className="min-w-0">
                 <h3 className="font-display text-lg leading-tight font-bold tracking-tight">{m.name}</h3>

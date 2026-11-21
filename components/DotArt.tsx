@@ -8,7 +8,7 @@ import { BF } from "@/lib/butterfly";
 type Art = (x: number, y: number, t: number) => string | 0;
 
 const BLUES = ["#0044cc", "#0058e6", "#0066FF", "#0080FF", "#0099FF", "#00AAFF", "#33CCFF"];
-const C = { hi: "#33CCFF", mid: "#00AAFF", deep: "#0066FF", fade: "#003a99", ink: "#161b22", edge: "#3a4654" };
+const C = { pale: "#bfeaff", hi: "#33CCFF", mid: "#00AAFF", deep: "#0066FF", fade: "#003a99", ink: "#161b22", edge: "#3a4654" };
 
 // The butterfly is traced from a photo into lib/butterfly.ts: half a wing pair,
 // column 0 = body centre, so |x| mirrors it. 0 empty, 1-2 black wing, 3-9 blue.
@@ -43,10 +43,11 @@ const smooth = (P: Poly, n = 2): Poly =>
 
 // fore/hind are right-hand wing outlines (mirrored). `paint` colours a point inside a wing from
 // its angle around the wing root and `inside(m)`: is the point still in the wing when pushed m× outward.
-function wings(fore: Poly, hind: Poly, paint: (th: number, inside: (m: number) => boolean) => string): Art {
+type Paint = (th: number, inside: (m: number) => boolean, ax: number, y: number) => string;
+function wings(fore: Poly, hind: Poly, paint: Paint): Art {
   const parts: [Poly, number][] = [[smooth(fore), 0.04], [smooth(hind), 0]];
-  return (x, y) => {
-    const ax = Math.abs(x) * 0.95;
+  return (x, y, t) => {
+    const ax = (Math.abs(x) * 0.95) / (0.93 + 0.07 * Math.cos(t)); // flap
     if (ax < 0.04 && y > -0.2 && y < 0.3) return C.edge; // body
     if (y < -0.18 && y > -0.5 && Math.abs(ax - (0.02 + (-y - 0.18) * 0.4)) < 0.022) return C.edge; // antennae
     for (const [P, oy] of parts) {
@@ -54,18 +55,28 @@ function wings(fore: Poly, hind: Poly, paint: (th: number, inside: (m: number) =
       const dx = ax - 0.02;
       const dy = y - oy;
       const inside = (m: number) => pip(0.02 + dx * m, oy + dy * m, P);
-      return inside(1.08) ? paint(Math.atan2(dy, dx), inside) : C.edge;
+      return inside(1.08) ? paint(Math.atan2(dy, dx), inside, ax, y) : C.edge;
     }
     return 0;
   };
 }
 
 const ART = {
-  // Morpho: broad rounded wings, almost entirely blue, thin dark margin.
-  morpho: wings(
-    [[0, -0.15], [0.2, -0.62], [0.55, -0.84], [0.9, -0.74], [0.96, -0.36], [0.74, -0.04], [0.3, 0.03], [0, 0.04]],
-    [[0, -0.06], [0.62, -0.06], [0.8, 0.2], [0.74, 0.52], [0.46, 0.76], [0.2, 0.68], [0.05, 0.36], [0, 0.2]],
-    (_th, inside) => (!inside(1.22) ? C.ink : inside(2.6) ? C.hi : inside(1.55) ? C.mid : C.deep),
+  // Emperor: falcate forewings with eyespots, a soft root-to-edge gradient, fine veins,
+  // a pearled margin and short tails.
+  emperor: wings(
+    [[0, -0.14], [0.18, -0.6], [0.5, -0.86], [0.9, -0.92], [0.98, -0.62], [0.9, -0.3], [0.74, -0.06], [0.3, 0.02], [0, 0.04]],
+    [[0, -0.06], [0.66, -0.07], [0.8, 0.16], [0.76, 0.44], [0.6, 0.62], [0.58, 0.8], [0.5, 0.94], [0.43, 0.78], [0.42, 0.66], [0.2, 0.62], [0.05, 0.34], [0, 0.2]],
+    (th, inside, ax, y) => {
+      for (const [ex, ey, r] of [[0.62, -0.5, 0.15], [0.48, 0.3, 0.11]]) {
+        const d = Math.hypot(ax - ex, y - ey) / r; // eyespot: pale pupil, dark ring, bright halo
+        if (d < 1) return d < 0.3 ? C.pale : d < 0.62 ? C.ink : C.hi;
+      }
+      if (!inside(1.2)) return Math.sin(th * 30) > 0.3 ? C.pale : C.ink; // pearled margin
+      if (!inside(1.38)) return C.fade;
+      if (Math.abs(Math.sin(th * 10)) < 0.09) return C.deep; // fine veins
+      return inside(3.2) ? C.pale : inside(2.1) ? C.hi : inside(1.6) ? C.mid : C.deep;
+    },
   ),
   // Monarch: pointed forewings, dark veins dividing blue cells, pale spots along the margin.
   monarch: wings(

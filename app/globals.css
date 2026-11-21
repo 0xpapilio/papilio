@@ -40,3 +40,20 @@ body {
     @apply rounded-xl border border-line bg-card p-5;
   }
 }
+
+/* Sections rise in as they scroll into view. Pure CSS; browsers without scroll timelines just show them. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    section {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}

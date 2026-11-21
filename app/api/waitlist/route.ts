@@ -4,6 +4,8 @@
 // ponytail: no rate limiting. Anyone can POST any address and trigger one confirmation email to it.
 // The honeypot stops dumb bots only; add Netlify rate limiting or a captcha if this gets abused.
 
+import { html, subject, text } from "@/lib/waitlist-email";
+
 const RESEND = "https://api.resend.com";
 const FROM = process.env.RESEND_FROM ?? "Papilio <onboarding@resend.dev>";
 
@@ -41,16 +43,9 @@ export async function POST(request: Request) {
   const mail = await resend("/emails", {
     from: FROM,
     to: email,
-    subject: "You're on the Papilio waitlist",
-    text: [
-      "You joined the Papilio waitlist.",
-      "",
-      "Papilio is a shielded intent router: your swap intent hides inside a ZK proof on Aleo and is executed MEV-protected through CoW Swap.",
-      "",
-      "We'll email you when V1 opens on Sepolia and Aleo testnet. Papilio never holds your funds.",
-      "",
-      "If you didn't sign up, ignore this email.",
-    ].join("\n"),
+    subject,
+    text,
+    html,
   });
   if (!mail.ok) console.error("Resend email failed", mail.status, await mail.text());
 
