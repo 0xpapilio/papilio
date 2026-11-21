@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: #050505;
+  --color-card: #0a0a0a;
+  --color-line: #171c22;
+  --color-ink: #f1f4f7;
+  --color-dim: #8792a0;
+  --color-faint: #4a5360;
+  --color-acc: #00aaff;
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-grotesk);
+  --font-mono: var(--font-jb);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  /* faint particle field, like distant dots */
+  background-image: radial-gradient(#ffffff12 1px, transparent 1px);
+  background-size: 90px 70px;
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+
+@layer components {
+  .btn {
+    @apply inline-block cursor-pointer whitespace-nowrap rounded-lg bg-acc px-4.5 py-2.5 text-sm font-medium text-[#00101f] transition-colors hover:bg-[#33ccff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acc;
+  }
+  .btn-ghost {
+    @apply border border-line bg-transparent text-ink hover:border-dim hover:bg-transparent;
+  }
+  .label {
+    @apply font-mono text-xs uppercase tracking-widest text-acc;
+  }
+  .card {
+    @apply rounded-xl border border-line bg-card p-5;
+  }
 }
