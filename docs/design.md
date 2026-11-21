@@ -89,6 +89,9 @@ pair in the clear, so a public observer learns it at settlement.
    them outside Papilio entirely.
 7. **Anonymity set ≈ 1** — on testnet, with one user, every order is that
    user. Privacy here is a mechanism demo, not an operational guarantee.
+8. **Public fee payer** — an Aleo tx that pays a *public* fee names the fee
+   payer's address. The web app asks the wallet for a private fee by default;
+   the CLI demo scripts pay public fees and so expose the demo account.
 
 ## Roadmap (not built in v1)
 

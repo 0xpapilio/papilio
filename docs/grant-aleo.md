@@ -36,7 +36,7 @@ one small, auditable program.
 
 ## Honesty
 
-[`design.md`](design.md) lists seven things that still leak at settlement and
+[`design.md`](design.md) lists eight things that still leak at settlement and
 names the v1 relayer trust assumption plainly. No marketing claims.
 
 ## Milestones (Aleo ask)

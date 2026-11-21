@@ -42,7 +42,7 @@ Deployed program ID and settled order links are recorded in
 - [x] Leo proof verifies with sufficient balance, fails without, balance never public — `aleo/papilio_intent/tests/test.sh`
 - [x] Sepolia order settles end-to-end from a verified commitment — `npm run demo`
 - [x] Unfilled intent refunds after expiry — `npm run demo:fail`
-- [x] `design.md` lists ≥ 3 leaks at settlement (it lists 7)
+- [x] `design.md` lists ≥ 3 leaks at settlement (it lists 8)
 - [x] No mainnet code — CI-enforced by `scripts/check-no-mainnet.sh`
 - [x] No private key leaves the local machine (keys live only in untracked `.env`)
 
