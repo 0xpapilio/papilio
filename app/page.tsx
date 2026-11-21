@@ -15,6 +15,23 @@ const WHY = [
   { title: "Solvers should compete blind", text: "Best price wins, without knowing who is asking." },
 ];
 
+const TEAM = [
+  {
+    art: "morpho",
+    name: "Veevaa Bajaj",
+    school: "NIFT SXR",
+    role: "Design + marketing",
+    text: "Shapes how Papilio looks and feels, and how people find it.",
+  },
+  {
+    art: "monarch",
+    name: "Sarandha Bhola",
+    school: "PIMR · BA LLB",
+    role: "Legal + compliance",
+    text: "Keeps Papilio on the right side of the rules.",
+  },
+] as const;
+
 function ScoreCard({ name, score, papilio = false }: { name: string; score: number; papilio?: boolean }) {
   const tone = papilio ? "text-acc" : "text-dim";
   return (
@@ -117,6 +134,25 @@ export default function Home() {
         <p className="text-center font-mono text-xs leading-loose tracking-wider text-dim">
           Built for CoW + Aleo grants · V1: Sepolia + Aleo testnet · No token, no paywall.
         </p>
+      </section>
+
+      <section id="team" className="border-t border-line py-12">
+        <p className="label">Team</p>
+        <ul className="mt-5 grid gap-4 md:grid-cols-2">
+          {TEAM.map((m) => (
+            <li key={m.name} className="card group flex items-center gap-4 transition-colors hover:border-acc/40">
+              <div className="shrink-0 rounded-lg border border-line bg-bg p-2">
+                <DotArt art={m.art} n={40} className="h-auto w-16 transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-display text-lg leading-tight font-bold tracking-tight">{m.name}</h3>
+                <p className="font-mono text-xs tracking-wider text-dim">{m.school}</p>
+                <p className="mt-2 font-mono text-xs tracking-wider text-acc uppercase">{m.role}</p>
+                <p className="text-sm text-dim">{m.text}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <footer className="flex flex-wrap items-center gap-4 border-t border-line py-7 font-mono text-xs tracking-wider text-dim">

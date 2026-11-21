@@ -7,6 +7,8 @@ const grotesk = Space_Grotesk({ variable: "--font-grotesk", subsets: ["latin"] }
 const jb = JetBrains_Mono({ variable: "--font-jb", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://papilio.vitalveev.in"),
+  twitter: { card: "summary_large_image" }, // image comes from app/opengraph-image.png
   title: "Papilio — shielded intent router",
   description:
     "Your trade, before it becomes a butterfly. Swap intents hidden in a ZK proof on Aleo, executed MEV-protected through CoW Swap.",

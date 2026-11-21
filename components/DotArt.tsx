@@ -15,7 +15,68 @@ const C = { hi: "#33CCFF", mid: "#00AAFF", deep: "#0066FF", fade: "#003a99", ink
 const at = (u: number, v: number) =>
   u < 0 || v < 0 || u >= BF.w || v >= BF.h ? 0 : +BF.d[v * BF.w + u];
 
-const ART: Record<"fly" | "cat" | "chr", Art> = {
+// --- Two more species for the team cards, drawn from wing outlines instead of a photo trace. ---
+type Poly = number[][];
+const pip = (x: number, y: number, P: Poly) => {
+  let c = false;
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const [xi, yi] = P[i];
+    const [xj, yj] = P[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c;
+  }
+  return c;
+};
+// Chaikin corner-cutting turns a rough outline into a smooth wing curve.
+const smooth = (P: Poly, n = 2): Poly =>
+  n
+    ? smooth(
+        P.flatMap((p, i) => {
+          const q = P[(i + 1) % P.length];
+          return [
+            [0.75 * p[0] + 0.25 * q[0], 0.75 * p[1] + 0.25 * q[1]],
+            [0.25 * p[0] + 0.75 * q[0], 0.25 * p[1] + 0.75 * q[1]],
+          ];
+        }),
+        n - 1,
+      )
+    : P;
+
+// fore/hind are right-hand wing outlines (mirrored). `paint` colours a point inside a wing from
+// its angle around the wing root and `inside(m)`: is the point still in the wing when pushed m× outward.
+function wings(fore: Poly, hind: Poly, paint: (th: number, inside: (m: number) => boolean) => string): Art {
+  const parts: [Poly, number][] = [[smooth(fore), 0.04], [smooth(hind), 0]];
+  return (x, y) => {
+    const ax = Math.abs(x) * 0.95;
+    if (ax < 0.04 && y > -0.2 && y < 0.3) return C.edge; // body
+    if (y < -0.18 && y > -0.5 && Math.abs(ax - (0.02 + (-y - 0.18) * 0.4)) < 0.022) return C.edge; // antennae
+    for (const [P, oy] of parts) {
+      if (!pip(ax, y, P)) continue;
+      const dx = ax - 0.02;
+      const dy = y - oy;
+      const inside = (m: number) => pip(0.02 + dx * m, oy + dy * m, P);
+      return inside(1.08) ? paint(Math.atan2(dy, dx), inside) : C.edge;
+    }
+    return 0;
+  };
+}
+
+const ART = {
+  // Morpho: broad rounded wings, almost entirely blue, thin dark margin.
+  morpho: wings(
+    [[0, -0.15], [0.2, -0.62], [0.55, -0.84], [0.9, -0.74], [0.96, -0.36], [0.74, -0.04], [0.3, 0.03], [0, 0.04]],
+    [[0, -0.06], [0.62, -0.06], [0.8, 0.2], [0.74, 0.52], [0.46, 0.76], [0.2, 0.68], [0.05, 0.36], [0, 0.2]],
+    (_th, inside) => (!inside(1.22) ? C.ink : inside(2.6) ? C.hi : inside(1.55) ? C.mid : C.deep),
+  ),
+  // Monarch: pointed forewings, dark veins dividing blue cells, pale spots along the margin.
+  monarch: wings(
+    [[0, -0.12], [0.25, -0.52], [0.6, -0.8], [0.98, -0.86], [0.94, -0.5], [0.72, -0.14], [0.35, -0.01], [0, 0.03]],
+    [[0, -0.05], [0.56, -0.09], [0.74, 0.16], [0.68, 0.44], [0.43, 0.63], [0.18, 0.57], [0.04, 0.3], [0, 0.15]],
+    (th, inside) => {
+      if (!inside(1.3)) return Math.sin(th * 22) > 0.55 ? C.hi : C.ink; // spotted margin
+      if (Math.abs(Math.sin(th * 8)) < 0.2) return C.ink; // veins
+      return inside(2.2) ? C.mid : C.deep;
+    },
+  ),
   fly(x, y, t) {
     const u = Math.floor((Math.abs(x) * (BF.w + 5)) / (0.93 + 0.07 * Math.cos(t))); // flap = squeeze toward the body
     const v = Math.floor(((y * 1.04 + 1) / 2) * BF.h);
@@ -51,7 +112,7 @@ const ART: Record<"fly" | "cat" | "chr", Art> = {
     if (a > w - 0.04) return C.edge;
     return Math.floor((y + 1) * 9) % 2 ? (a < w * 0.35 ? C.mid : C.deep) : a < w * 0.5 ? C.fade : C.ink;
   },
-};
+} satisfies Record<string, Art>;
 
 const CELL = 6;
 
