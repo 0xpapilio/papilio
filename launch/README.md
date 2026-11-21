@@ -19,7 +19,7 @@ Everything for launching Papilio and applying for grants. Start with
 | `launch-post.png` | 1080×1080 announcement image |
 | `x-banner.png` | 1500×500 X/Twitter header |
 | `how-it-works.png` | 1600×900 three-step diagram |
-| `app-screenshot.png` | The live app tracking a real settled trade |
+| `app-screenshot.png` | The live app (current layout) tracking the real settled testnet trade |
 | `testnet-proof-screenshot.png` | The /testnet proof page |
 
 The grant drafts are filled in. One gap left: the payout wallet address in the full CoW application.
