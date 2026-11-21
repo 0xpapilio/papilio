@@ -21,8 +21,8 @@ Checked 21 Nov 2026. Programs change; re-check each link on the day you apply.
      (Ready-made: `papilio-aleo-proposal.pdf` in this folder, same sections.)
   3. Submit the form: https://form.asana.com/?k=sCm0WT9M-V_fHl8AA48czQ&d=1199198487809755
 - **Smaller tier:** the form asks whether you already have a **START** grant, which is a smaller first tier. If you'd rather start there, email **grants@aleo.org**:
-  > "We're a student team with a live Aleo testnet dapp (Papilio, ZeFi). Should
-  > we apply for a START grant first, and how?"
+  > "I'm building Papilio, a live Aleo testnet dapp (ZeFi). Should I apply for a
+  > START grant first, and how?"
 - **Size and payment:** up to $100K, paid per milestone.
 - **Timeline:** first feedback is promised within ~1 week, then a technical review.
 - **KYC/AML:** required for the whole team, but only if the grant goes ahead.

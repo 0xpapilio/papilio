@@ -39,8 +39,7 @@ before we apply? Thanks!
 Papilio: private trade intents for CoW Protocol
 
 ### Author(s)
-Anukul Pandey (engineering) · Veevaa Bajaj (design + marketing) ·
-Sarandha Bhola (legal + compliance). Forum handle: @anuna
+Anukul Pandey (engineering). Forum handle: @anuna
 
 ### Experiences and qualifications
 We built and shipped Papilio v1 end to end: a Leo program on Aleo testnet,
@@ -118,7 +117,7 @@ Milestone-based
 
 ### Funding Request
 10,000 xDAI + 5,000 COW total.
-- xDAI covers engineering time for three milestones (~4 months, two people part-time)
+- xDAI covers engineering time for three milestones (~4 months, part-time)
   and relayer infrastructure (RPC, hosting, testnet inventory).
 - COW aligns us long-term with the protocol and is paid only on the mainnet-readiness milestone.
 

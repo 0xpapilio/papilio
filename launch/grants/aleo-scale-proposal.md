@@ -69,8 +69,6 @@ Aleo transaction, so it brings EVM order flow onto Aleo.
 | Name | Role | Background |
 |---|---|---|
 | **Anukul Pandey** | Engineering: Leo program, relayer, app | B.Tech, Electronics and Instrumentation · won Reef Chain hackathons and received Reef Chain grants, won Avalanche Speedrun (Team1) twice, won the Gelato global hackathon · github.com/anukulpandey · linkedin.com/in/anukulpandey · anukul.notcool.in |
-| **Veevaa Bajaj** | Design + marketing | NIFT SXR |
-| **Sarandha Bhola** | Legal + compliance | PIMR, BA LLB |
 
 What we've already shipped (in about a month): deployed `papilio_intent.aleo`
 on testnet, a relayer that settles real CoW Protocol orders, a wallet-connected
@@ -149,7 +147,7 @@ not to claim without trading. Milestone 1 removes that.
 | 2 | **Real assets + private fees by default** | Replace the test token with a bridged/stable asset on Aleo testnet (e.g. via existing bridges); private-fee onboarding in the app; second tier set; anonymity-set metrics on the proof page | 5 weeks | $12,000 |
 | 3 | **Audit-ready + mainnet plan** | External review of the Leo program, escrow-lifecycle fuzzing, relayer hardening (monitoring, inventory limits), mainnet launch plan with CoW | 6 weeks | $13,000 |
 
-**Budget use:** two developers' time (~70%), security review (~20%),
+**Budget use:** engineering time (~70%), security review (~20%),
 infrastructure (relayer hosting, RPC, testnet liquidity) (~10%).
 
 **What's already done (no funding requested):** v1 program, relayer, dapp, and

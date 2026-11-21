@@ -78,8 +78,6 @@ Papilio separates *who* is trading from *what* is traded:
 
 It's live on Aleo testnet + Ethereum Sepolia, and every step of a real trade is verifiable on public explorers.
 
-Built by a three-person student team: engineering, design + marketing, and legal + compliance.
-
 Try it: https://papilio.vitalveev.in/app
 Proof of a full trade: https://papilio.vitalveev.in/testnet
 

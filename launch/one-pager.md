@@ -45,8 +45,6 @@ across chains can correlate; testnet anonymity set is tiny.
 
 ## Team
 - **Anukul Pandey:** engineering (Leo program, relayer, app)
-- **Veevaa Bajaj** (NIFT SXR): design + marketing
-- **Sarandha Bhola** (PIMR, BA LLB): legal + compliance
 
 ## Links
 App https://papilio.vitalveev.in/app · Proof https://papilio.vitalveev.in/testnet ·
