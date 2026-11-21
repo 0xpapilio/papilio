@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AleoWalletProvider, useWallet } from "@provablehq/aleo-wallet-adapter-react";
-import { WalletModalProvider, WalletMultiButton } from "@provablehq/aleo-wallet-adapter-react-ui";
+import { WalletModalProvider, WalletMultiButton, useWalletModal } from "@provablehq/aleo-wallet-adapter-react-ui";
 import { ShieldWalletAdapter } from "@provablehq/aleo-wallet-adapter-shield";
 import { LeoWalletAdapter } from "@provablehq/aleo-wallet-adapter-leo";
 import { PuzzleWalletAdapter } from "@provablehq/aleo-wallet-adapter-puzzle";
@@ -49,16 +49,19 @@ export default function PapilioApp() {
     () => [new ShieldWalletAdapter(), new LeoWalletAdapter({ appName: "Papilio" }), new PuzzleWalletAdapter()],
     [],
   );
+  // Without this the library only console.logs wallet failures, so a locked or refusing wallet looks like a dead button.
+  const [walletError, setWalletError] = useState("");
   return (
     <AleoWalletProvider
       wallets={wallets}
       network={Network.TESTNET}
       autoConnect
+      onError={(e) => setWalletError(`Wallet: ${e.message || e.name || "could not connect"}`)}
       decryptPermission={WalletDecryptPermission.UponRequest}
       programs={[PROGRAM, "credits.aleo"]}
     >
       <WalletModalProvider>
-        <Shell />
+        <Shell walletError={walletError} clearWalletError={() => setWalletError("")} />
       </WalletModalProvider>
     </AleoWalletProvider>
   );
@@ -66,7 +69,7 @@ export default function PapilioApp() {
 
 // ---------- page ----------
 
-function Shell() {
+function Shell({ walletError, clearWalletError }: { walletError: string; clearWalletError: () => void }) {
   const w = useWallet();
   const [height, setHeight] = useState<number | null>(null);
   const [records, setRecords] = useState<Rec[]>([]);
@@ -175,17 +178,17 @@ function Shell() {
           <span className="size-1.5 rounded-full bg-[#13bc80]" />
           Aleo {height ? `#${height.toLocaleString()}` : "…"}
         </span>
-        <WalletMultiButton />
+        <WalletButton onOpen={clearWalletError} />
       </nav>
 
-      {error && (
+      {(error || walletError) && (
         <div role="alert" className="mt-4 flex items-start justify-between gap-3 rounded-lg border border-[#fe514e]/40 bg-[#fe514e]/10 px-4 py-3 text-sm">
-          <span>{error}</span>
-          <button onClick={() => setError("")} className="text-dim hover:text-ink" aria-label="Dismiss">✕</button>
+          <span>{error || walletError}</span>
+          <button onClick={() => { setError(""); clearWalletError(); }} className="text-dim hover:text-ink" aria-label="Dismiss">✕</button>
         </div>
       )}
 
-      <div className="mt-8 grid gap-5 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+      <div className="mx-auto mt-10 w-full max-w-[460px]">
         <SwapCard
           connected={w.connected}
           balance={balance}
@@ -197,7 +200,9 @@ function Shell() {
           onRefresh={refreshRecords}
         />
 
-        <section aria-label="Your intents" className="min-w-0">
+      </div>
+
+      <section aria-label="Your intents" className="mx-auto mt-12 w-full max-w-[680px] min-w-0">
           <div className="mb-3 flex items-baseline justify-between">
             <p className="label">Your intents</p>
             {w.connected && (
@@ -225,10 +230,32 @@ function Shell() {
             </ul>
           )}
         </section>
-      </div>
 
       <HowItWorks />
     </div>
+  );
+}
+
+// ---------- wallet button ----------
+
+// Disconnected, the stock button retries the last-used wallet and swallows any error, so a click can do
+// nothing visible. Always open the picker instead; choosing there connects and reports errors via onError.
+function WalletButton({ onOpen }: { onOpen: () => void }) {
+  const w = useWallet();
+  const { setVisible } = useWalletModal();
+  if (w.connected) return <WalletMultiButton />;
+  return (
+    <button
+      type="button"
+      className="btn"
+      onClick={() => {
+        onOpen();
+        w.selectWallet(null);
+        setVisible(true);
+      }}
+    >
+      {w.connecting ? "Connecting…" : "Connect wallet"}
+    </button>
   );
 }
 
