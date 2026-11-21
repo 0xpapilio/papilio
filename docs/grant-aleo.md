@@ -3,6 +3,8 @@
 **One line:** private trade intents on Aleo, settled through CoW Protocol,
 with the user's wallet and balance never leaving zero knowledge.
 
+**Live on testnet (verify in one click):** program [`papilio_intent.aleo`](https://testnet.aleoscan.io/program?id=papilio_intent.aleo) · settled CoW order [`0x8e48ce9f…`](https://explorer.cow.fi/sepolia/orders/0x8e48ce9f85493b0277de15a43113bba9f7bb9c7ef166790c6a2d980ef61a6be6160319aa4441838d1284f0ae75b1bbb1016627f76b0181f4) · [all tx links](../aleo/papilio_intent/DEPLOYMENT.md) · [solver-visible payload](evidence/happy-path-run.json)
+
 ## What is built (v1, Aleo testnet)
 
 - [`papilio_intent.aleo`](../aleo/papilio_intent/src/main.leo): a user locks a

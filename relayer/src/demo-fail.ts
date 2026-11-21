@@ -38,7 +38,8 @@ try {
 
 console.log('== FAIL CASE 2: unfilled intent -> refund after expiry ==')
 const tok = await mintToken('1000000u64')
-const expiry = (await height()) + 8 // expires in ~8 blocks; no relayer will act
+// ~2s blocks: leave room for proving + broadcast or finalize rejects the lock.
+const expiry = (await height()) + 90 // ~3 min; no relayer will act
 const lockTx = leoExecute(
   'lock_intent',
   [tok.plaintext, denom, '1field', receiverToField(env('DEMO_RECEIVER')),
@@ -51,7 +52,8 @@ if (!ticket) throw new Error('refund ticket not found')
 
 console.log('refund before expiry must fail...')
 let early = false
-try { leoExecute('refund', [ticket.plaintext], userKey); early = true } catch { /* expected */ }
+// Fails either locally or as an on-chain rejection (finalize expiry check).
+try { await waitForAccepted(leoExecute('refund', [ticket.plaintext], userKey)); early = true } catch { /* expected */ }
 if (early) { console.log('FAIL: early refund accepted'); process.exit(1) }
 console.log('PASS: early refund rejected')
 

@@ -1,0 +1,34 @@
+{
+  "lockTxId": "at1mcn4e3wfzkplv0mdx572ndqxqagymwpzswl9a3lhs2ty4eeke5zs4hr4ue",
+  "startedAt": "2026-11-21T11:05:00.242Z",
+  "commitment": "1429079116081197295407915302174717736125013441328977764335115896261467250081field",
+  "pair": "WETH->COW",
+  "denomination": "10000u64",
+  "receiver": "0x312fb89a890014b6b821e9475456453d99644513",
+  "orderUid": "0x8e48ce9f85493b0277de15a43113bba9f7bb9c7ef166790c6a2d980ef61a6be6160319aa4441838d1284f0ae75b1bbb1016627f76b0181f4",
+  "solverVisiblePayload": {
+    "sellToken": "0xfff9976782d46cc05630d1f6ebab18b2324d6b14",
+    "buyToken": "0x0625afb445c3b6b7b929342a04a22599fd5dbb59",
+    "receiver": "0x312fb89a890014b6b821e9475456453d99644513",
+    "sellAmount": "1000000000000000",
+    "buyAmount": "34596407521826125",
+    "validTo": 1795260916,
+    "appData": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "feeAmount": "0",
+    "gasAmount": "457366",
+    "gasPrice": "100000000",
+    "sellTokenPrice": "1",
+    "kind": "sell",
+    "partiallyFillable": false,
+    "sellTokenBalance": "erc20",
+    "buyTokenBalance": "erc20",
+    "signingScheme": "eip712",
+    "signature": "0x502840a96cd5dc3a1c4ddaa7dca8b125161b89b329d22bfd20f4bc12c55ebb92665b3fa9dd1a23407dd427e66eb02f8416db8d6542d2baec6806915995c5e8981b",
+    "owner": "0x160319aa4441838d1284F0ae75b1BBb1016627F7"
+  },
+  "settlement": {
+    "status": "fulfilled",
+    "settlementTx": "0xe9f7c15b30ed10be94f3ed115d993a5ff4d6185e61144e3e59eaa38c48ff8632"
+  },
+  "claimTxId": "at157prt5psqf4ga8ljjsy63tpnngxg26fk2qze4qaqufll5y0wegpqyrjkj5"
+}

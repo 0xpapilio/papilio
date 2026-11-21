@@ -67,6 +67,7 @@ export default function Home() {
         <a href="#score" className="hidden text-sm text-dim hover:text-ink md:inline">Privacy score</a>
         <a href="#roadmap" className="hidden text-sm text-dim hover:text-ink md:inline">Roadmap</a>
         <a href="#team" className="hidden text-sm text-dim hover:text-ink md:inline">Team</a>
+        <a href="/testnet" className="hidden text-sm text-acc hover:text-ink md:inline">Live on testnet</a>
         <a href="#top" className="btn">Join waitlist</a>
       </nav>
 
@@ -80,7 +81,10 @@ export default function Home() {
             Swap intents hidden in a ZK proof on Aleo, executed MEV-protected through CoW Swap.
           </p>
           <Waitlist />
-          <p className="font-mono text-xs tracking-wider text-dim">No custody · testnet only in V1</p>
+          <p className="font-mono text-xs tracking-wider text-dim">
+            No custody · testnet only in V1 ·{" "}
+            <a href="/testnet" className="text-acc hover:underline">see a live trade →</a>
+          </p>
         </div>
         <div className="relative mx-auto w-full max-w-[480px]">
           <div className="pointer-events-none absolute -inset-[8%] bg-[radial-gradient(closest-side,#0066ff26,transparent)]" />

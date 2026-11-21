@@ -32,15 +32,15 @@ cd ../../relayer && npm install && npm test              # 3-4: relayer units
 cp env.example .env   # fill testnet keys, then:  npm run demo
 ```
 
-Deployed program ID and a settled order link are recorded in
-[`aleo/papilio_intent/DEPLOYMENT.md`](aleo/papilio_intent/DEPLOYMENT.md)
-after first deploy.
+Deployed program ID and settled order links are recorded in
+[`aleo/papilio_intent/DEPLOYMENT.md`](aleo/papilio_intent/DEPLOYMENT.md).
+
 
 ## Acceptance status
 
-- [ ] Leo proof verifies with sufficient balance, fails without, balance never public — `aleo/papilio_intent/tests/test.sh`
-- [ ] Sepolia order settles end-to-end from a verified commitment — `npm run demo`
-- [ ] Unfilled intent refunds after expiry — `npm run demo:fail`
+- [x] Leo proof verifies with sufficient balance, fails without, balance never public — `aleo/papilio_intent/tests/test.sh`
+- [x] Sepolia order settles end-to-end from a verified commitment — `npm run demo`
+- [x] Unfilled intent refunds after expiry — `npm run demo:fail`
 - [x] `design.md` lists ≥ 3 leaks at settlement (it lists 7)
 - [x] No mainnet code — CI-enforced by `scripts/check-no-mainnet.sh`
 - [x] No private key leaves the local machine (keys live only in untracked `.env`)

@@ -40,20 +40,21 @@ export function recordCiphertexts(tx: any): string[] {
 }
 
 // Decrypt every record in a tx that belongs to this view key.
+// Uses the leo CLI, which tracks the live record format (the JS SDK lagged
+// behind it); decrypt exits non-zero for records this key doesn't own.
 export async function decryptMyRecords(tx: any, viewKeyStr: string) {
-  // The published .d.ts misses these exports; they exist at runtime.
-  const { RecordCiphertext, ViewKey } = (await import('@provablehq/sdk')) as any
-  const vk = ViewKey.from_string(viewKeyStr)
   const mine: { plaintext: string; fields: Record<string, string> }[] = []
   for (const ct of recordCiphertexts(tx)) {
     try {
-      const rc = RecordCiphertext.fromString(ct)
-      if (rc.isOwner(vk)) {
-        const plaintext = rc.decrypt(vk).toString()
-        mine.push({ plaintext, fields: parseRecordPlaintext(plaintext) })
-      }
+      const out = execFileSync(
+        'leo',
+        ['account', 'decrypt', '-q', '-n', network(), '-k', viewKeyStr, '-c', ct],
+        { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
+      )
+      const plaintext = out.slice(out.indexOf('{'), out.lastIndexOf('}') + 1).replace(/\s+/g, ' ')
+      mine.push({ plaintext, fields: parseRecordPlaintext(plaintext) })
     } catch {
-      /* not ours / not parseable */
+      /* not ours */
     }
   }
   return mine
@@ -76,11 +77,12 @@ export function leoExecute(transition: string, args: string[], privateKey: strin
 export async function waitForAccepted(txId: string, timeoutMs = 5 * 60_000) {
   const deadline = Date.now() + timeoutMs
   while (Date.now() < deadline) {
-    try {
-      const tx = await getTransaction(txId)
-      if (tx) return tx
-    } catch {
-      /* not yet indexed */
+    // A rejected execution (finalize failed) is still indexed; check status.
+    const res = await fetch(`${endpoint()}/${network()}/transaction/confirmed/${txId}`)
+    if (res.ok) {
+      const c = await res.json()
+      if (c.status === 'accepted') return c.transaction
+      throw new Error(`tx ${txId} ${c.status} on-chain`)
     }
     await new Promise((r) => setTimeout(r, 10_000))
   }

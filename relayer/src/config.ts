@@ -29,4 +29,4 @@ export const PAIRS: Record<string, { sellToken: string; buyToken: string; label:
   '1field': { sellToken: TOKENS.WETH, buyToken: TOKENS.COW, label: 'WETH->COW' },
 }
 
-export const EXPIRY_BLOCKS = 1_000 // ~ hours on Aleo testnet; refundable after
+export const EXPIRY_BLOCKS = 1_000 // ~35 min at ~2s testnet blocks; refundable after
