@@ -7,7 +7,7 @@
 import { html, subject, text } from "@/lib/waitlist-email";
 
 const RESEND = "https://api.resend.com";
-const FROM = process.env.RESEND_FROM ?? "Papilio <onboarding@resend.dev>";
+const FROM = process.env.RESEND_FROM || "Papilio <hello@vitalveev.in>";
 
 const json = (body: object, status = 200) => Response.json(body, { status });
 
