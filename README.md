@@ -20,7 +20,8 @@ user ──lock(zk)──▶ Aleo escrow ──encrypted intent──▶ relayer
 |------|------|
 | [`docs/design.md`](docs/design.md) | flow, who-learns-what, trust model, leak list |
 | [`aleo/papilio_intent/`](aleo/papilio_intent) | Leo program: lock / claim / refund + tests |
-| [`relayer/`](relayer) | TS relayer: decrypt intent → CoW order → claim; evidence logs |
+| [`relayer/`](relayer) | TS relayer: decrypt intent → CoW order → claim; evidence logs. `npm run relayer` watches the chain |
+| [`app/app/`](app/app) | the dapp at `/app`: connect wallet, mint test tokens, shield & swap, track, refund |
 | [`docs/grant-aleo.md`](docs/grant-aleo.md), [`docs/grant-cow.md`](docs/grant-cow.md) | grant cover pages |
 | [`app/`](app) | landing page (Next.js, [papilio site](https://papilio.network)) |
 

@@ -68,7 +68,7 @@ export default function Home() {
         <a href="#roadmap" className="hidden text-sm text-dim hover:text-ink md:inline">Roadmap</a>
         <a href="#team" className="hidden text-sm text-dim hover:text-ink md:inline">Team</a>
         <a href="/testnet" className="hidden text-sm text-acc hover:text-ink md:inline">Live on testnet</a>
-        <a href="#top" className="btn">Join waitlist</a>
+        <a href="/app" className="btn">Launch app</a>
       </nav>
 
       <header id="top" className="grid items-center gap-6 pt-12 pb-18 md:grid-cols-[1.1fr_0.9fr] md:pt-20 md:pb-28">
@@ -83,7 +83,7 @@ export default function Home() {
           <Waitlist />
           <p className="font-mono text-xs tracking-wider text-dim">
             No custody · testnet only in V1 ·{" "}
-            <a href="/testnet" className="text-acc hover:underline">see a live trade →</a>
+            <a href="/app" className="text-acc hover:underline">try the testnet app →</a>
           </p>
         </div>
         <div className="relative mx-auto w-full max-w-[480px]">

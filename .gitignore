@@ -50,3 +50,6 @@ aleo/papilio_intent/build/
 aleo/papilio_intent/outputs/
 aleo/papilio_intent/.address
 relayer/logs/
+
+# relayer watch cursor
+relayer/.watch-state.json

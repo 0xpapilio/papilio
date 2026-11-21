@@ -16,8 +16,12 @@ with the user's wallet and balance never leaving zero knowledge.
   blocked in `finalize`.
 - The relayer learns the trade parameters through an encrypted `IntentNote`
   record — decrypted with its view key, never posted anywhere.
-- Fees are paid with private fee records, so the lock transaction reveals no
-  sender address.
+- The web app ([`/app`](https://papilio.vitalveev.in/app)) asks the wallet for
+  a private fee, so the lock transaction reveals no sender address. (The CLI
+  demo runs paid public fees, which do expose the demo account's address.)
+- Wallet-driven: Shield, Leo or Puzzle wallet signs and proves `lock_intent`
+  and `refund` in the browser; the relayer discovers locks by scanning blocks
+  and trial-decrypting with its view key — no API, no submission endpoint.
 - Offline test suite ([`tests/test.sh`](../aleo/papilio_intent/tests/test.sh)):
   sufficient balance proves, insufficient balance cannot produce a proof,
   the balance never appears in the public finalize arguments.

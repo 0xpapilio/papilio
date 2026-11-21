@@ -8,6 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@provablehq/aleo-types": "1.3.0",
+    "@provablehq/aleo-wallet-adapter-leo": "1.1.4",
+    "@provablehq/aleo-wallet-adapter-puzzle": "1.1.4",
+    "@provablehq/aleo-wallet-adapter-react": "1.5.0",
+    "@provablehq/aleo-wallet-adapter-react-ui": "1.3.3",
+    "@provablehq/aleo-wallet-adapter-shield": "1.5.0",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"

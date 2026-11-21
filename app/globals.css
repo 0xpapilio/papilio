@@ -17,6 +17,24 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Aleo wallet adapter UI, in Papilio colors. Doubled :root beats the
+   adapter stylesheet's own :root, which loads after this file. */
+:root:root {
+  --wallet-adapter-primary: #00aaff;
+  --wallet-adapter-primary-hover: #33ccff;
+  --wallet-adapter-primary-foreground: #00101f;
+  --wallet-adapter-secondary: #00aaff;
+  --wallet-adapter-secondary-hover: #33ccff;
+  --wallet-adapter-background: #050505;
+  --wallet-adapter-surface: #0a0a0a;
+  --wallet-adapter-surface-hover: #11161c;
+  --wallet-adapter-surface-light: #171c22;
+  --wallet-adapter-text: #f1f4f7;
+  --wallet-adapter-text-secondary: #8792a0;
+  --wallet-adapter-border: #171c22;
+  --wallet-adapter-border-light: #232a33;
+}
+
 body {
   background-color: var(--color-bg);
   /* faint particle field, like distant dots */

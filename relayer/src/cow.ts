@@ -50,7 +50,9 @@ export async function placeOrder(
     feeAmount: '0',
     receiver: params.receiver,
     partiallyFillable: false,
-    validTo: Math.floor(Date.now() / 1000) + 30 * 60,
+    // Must expire well before the Aleo escrow does (relayer.ts MIN_BLOCKS_LEFT),
+    // or the user could refund while this order still fills.
+    validTo: Math.floor(Date.now() / 1000) + 15 * 60,
   }
 
   const { signature, signingScheme } = await OrderSigningUtils.signOrder(
